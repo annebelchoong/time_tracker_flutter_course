@@ -18,7 +18,7 @@ class SignInPage extends StatelessWidget {
 
   Widget _buildContent() {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(30.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
