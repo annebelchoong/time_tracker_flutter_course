@@ -11,6 +11,14 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   User _user;
 
+  //To make the page stay at the same after logged in
+  //perform initialization
+  @override
+  void initState() {
+    super.initState();
+    _updateUser(FirebaseAuth.instance.currentUser);
+  }
+
   void _updateUser(User user){
     setState(() {
       _user = user;
