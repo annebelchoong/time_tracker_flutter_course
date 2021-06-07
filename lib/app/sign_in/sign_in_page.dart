@@ -5,7 +5,7 @@ import 'package:time_tracker_flutter_course/app/sign_in/social_sign_in_button.da
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key, @required this.auth, @required this.onSignIn}) : super(key: key);\
+  const SignInPage({Key key, @required this.auth, @required this.onSignIn}) : super(key: key);
   final AuthBase auth;
   //define onSignIn to be a Function that can pass the argument type (User)
   //void specify that it doesn't return any values
