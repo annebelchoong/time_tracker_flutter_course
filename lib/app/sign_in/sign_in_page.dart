@@ -1,24 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/sign_in_button.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/social_sign_in_button.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key, @required this.auth, @required this.onSignIn}) : super(key: key);
+  const SignInPage({Key key, @required this.auth}) : super(key: key);
   final AuthBase auth;
-  //define onSignIn to be a Function that can pass the argument type (User)
-  //void specify that it doesn't return any values
-  //this way of doing is to make it a property of SignInPage which allow to make a constructor
-  final void Function(User) onSignIn;
-
 
   Future<void> _signInAnonymously() async {
     try {
       //FirebaseAuth.instances is the one and only instances in the class
       //use user because it return a user
-      final user = await auth.signInAnonymously();
-      onSignIn(user);
+      await auth.signInAnonymously();
     }catch(e){
       print(e.toString());
     }
