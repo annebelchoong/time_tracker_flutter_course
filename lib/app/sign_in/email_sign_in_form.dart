@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 
 class EmailSignInForm extends StatelessWidget {
   List<Widget> _buildChildren() {
@@ -16,9 +17,9 @@ class EmailSignInForm extends StatelessWidget {
         obscureText: true,
       ),
       SizedBox(height: 8.0),
-      ElevatedButton(
+      FormSubmitButton(
         onPressed: () {},
-        child: Text('Sign in'),
+        text: 'Sign in',
       ),
       TextButton(
         onPressed: () {},
