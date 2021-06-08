@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'email_sign_in_form.dart';
+
 class EmailSignInPage extends StatelessWidget {
   const EmailSignInPage({Key key}) : super(key: key);
 
@@ -11,12 +13,13 @@ class EmailSignInPage extends StatelessWidget {
         centerTitle: true,
         elevation: 2.0,
       ),
-      body: _buildContent(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          child: EmailSignInForm(),
+        ),
+      ),
       backgroundColor: Colors.grey[900],
     );
-  }
-
-  Widget _buildContent() {
-    return Container();
   }
 }
