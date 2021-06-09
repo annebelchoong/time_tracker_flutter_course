@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
+import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 enum EmailSignInFormType { signIn, register }
@@ -44,35 +45,23 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       }
       Navigator.of(context).pop();
     } catch (e) {
-      if(Platform.isIOS){
-        print('show CupertinoAlertDialog');
-      }else {
-        showDialog(
-          context: context,
-          builder: (context){
-            return AlertDialog(
-              title: Text('Sign in failed'),
-              content: Text(e.toString()),
-              actions: [
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    }finally{
+      showAlertDialog(
+        context,
+        title: 'Sign in failed',
+        content: e.toString(),
+        defaultActionText: 'OK',
+      );
+    } finally {
       setState(() {
-        _isLoading=false;
+        _isLoading = false;
       });
     }
   }
 
   void _emailEditingComplete() {
     final newFocus = widget.emailValidator.isValid(_email)
-    ? _passwordFocusNode : _emailFocusNode;
+        ? _passwordFocusNode
+        : _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 
@@ -96,7 +85,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         : 'Have and account? Sign in';
 
     bool submitEnabled = widget.emailValidator.isValid(_email) &&
-        widget.passwordValidator.isValid(_password) && !_isLoading;
+        widget.passwordValidator.isValid(_password) &&
+        !_isLoading;
 
     return [
       _buildEmailTextField(),
@@ -108,7 +98,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         text: primaryText,
       ),
       TextButton(
-        onPressed: !_isLoading ? _toggleFormType: null,
+        onPressed: !_isLoading ? _toggleFormType : null,
         child: Text(secondaryText),
       ),
     ];
