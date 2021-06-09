@@ -52,7 +52,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
               actions: [
                 TextButton(
                   child: Text('OK'),
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
             );
