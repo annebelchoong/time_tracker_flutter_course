@@ -21,19 +21,20 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   final FocusNode _passwordFocusNode = FocusNode();
 
   String get _email => _emailController.text;
+
   String get _password => _passwordController.text;
 
   EmailSignInFormType _formType = EmailSignInFormType.signIn;
 
   void _submit() async {
-    try{
+    try {
       if (_formType == EmailSignInFormType.signIn) {
         await widget.auth.signInWithEmailAndPassword(_email, _password);
       } else {
         await widget.auth.createUserWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }
@@ -59,13 +60,16 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     final secondaryText = _formType == EmailSignInFormType.signIn
         ? 'Need an account? Register'
         : 'Have and account? Sign in';
+
+    bool submitEnabled = _email.isNotEmpty && _password.isNotEmpty;
+
     return [
       _buildEmailTextField(),
       SizedBox(height: 8.0),
       _buildPasswordTextField(),
       SizedBox(height: 8.0),
       FormSubmitButton(
-        onPressed: _submit,
+        onPressed: submitEnabled ? _submit : null,
         text: primaryText,
       ),
       TextButton(
@@ -84,6 +88,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       ),
       obscureText: true,
       textInputAction: TextInputAction.done,
+      onChanged: (password) => _updateState(),
       onEditingComplete: _submit,
     );
   }
@@ -99,6 +104,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
+      onChanged: (email) => _updateState(),
       onEditingComplete: _emailEditingComplete,
     );
   }
@@ -113,5 +119,10 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         children: _buildChildren(),
       ),
     );
+  }
+
+  void _updateState() {
+    print('email : $_email, password: $_password');
+    setState(() {});
   }
 }
