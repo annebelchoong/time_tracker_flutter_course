@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 enum EmailSignInFormType { signIn, register }
 
-class EmailSignInForm extends StatefulWidget {
-  const EmailSignInForm({@required this.auth});
+class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
+   EmailSignInForm({@required this.auth});
 
   final AuthBase auth;
 
@@ -43,7 +44,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     FocusScope.of(context).requestFocus(_passwordFocusNode);
   }
 
-  void _ToggleFormType() {
+  void _toggleFormType() {
     setState(() {
       _formType = _formType == EmailSignInFormType.signIn
           ? EmailSignInFormType.register
@@ -61,7 +62,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         ? 'Need an account? Register'
         : 'Have and account? Sign in';
 
-    bool submitEnabled = _email.isNotEmpty && _password.isNotEmpty;
+    bool submitEnabled = widget.emailValidator.isValid(_email) &&
+        widget.passwordValidator.isValid(_password);
 
     return [
       _buildEmailTextField(),
@@ -73,7 +75,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         text: primaryText,
       ),
       TextButton(
-        onPressed: _ToggleFormType,
+        onPressed: _toggleFormType,
         child: Text(secondaryText),
       ),
     ];
