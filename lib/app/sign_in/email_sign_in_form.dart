@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
@@ -42,8 +44,10 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       }
       Navigator.of(context).pop();
     } catch (e) {
-      print(e.toString());
-      showDialog(
+      if(Platform.isIOS){
+        print('show CupertinoAlertDialog');
+      }else {
+        showDialog(
           context: context,
           builder: (context){
             return AlertDialog(
@@ -57,7 +61,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
               ],
             );
           },
-      );
+        );
+      }
     }finally{
       setState(() {
         _isLoading=false;
