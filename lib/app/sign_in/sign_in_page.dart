@@ -14,7 +14,7 @@ class SignInPage extends StatelessWidget {
       //FirebaseAuth.instances is the one and only instances in the class
       //use user because it return a user
       await auth.signInAnonymously();
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }
@@ -22,7 +22,7 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInWithGoogle() async {
     try {
       await auth.signInWithGoogle();
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }
@@ -31,7 +31,9 @@ class SignInPage extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         fullscreenDialog: true,
-        builder: (context) => EmailSignInPage(),
+        builder: (context) => EmailSignInPage(
+          auth: auth,
+        ),
       ),
     );
   }
@@ -68,7 +70,7 @@ class SignInPage extends StatelessWidget {
           ),
           SizedBox(height: 48.0),
           SocialSignInButton(
-            assetName:'images/google-logo.png',
+            assetName: 'images/google-logo.png',
             text: 'Sign in with Google',
             textColor: Colors.black87,
             color: Colors.white,
@@ -105,7 +107,6 @@ class SignInPage extends StatelessWidget {
             color: Colors.black87,
             onPressed: _signInAnonymously,
           ),
-
         ],
       ),
     );

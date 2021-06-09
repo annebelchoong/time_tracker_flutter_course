@@ -8,6 +8,10 @@ abstract class AuthBase {
 
   Future<User> signInAnonymously();
 
+  Future<User> signInWithEmailAndPassword(String email, String password);
+
+  Future<User> createUserWithEmailAndPassword(String email, String password);
+
   Future<User> signInWithGoogle();
 
   Future<void> signOut();
@@ -31,6 +35,26 @@ class Auth implements AuthBase {
   }
 
   @override
+  //sign in with email
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
+    final userCredential = await _firebaseAuth.signInWithCredential(
+      EmailAuthProvider.credential(email: email, password: password),
+    );
+    return userCredential.user;
+  }
+
+  @override
+  //register with email
+  Future<User> createUserWithEmailAndPassword(
+      String email, String password) async {
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
+  }
+
+  @override
   //sign in with Google
   Future<User> signInWithGoogle() async {
     final googleSignIn = GoogleSignIn();
@@ -44,7 +68,7 @@ class Auth implements AuthBase {
           accessToken: googleAuth.accessToken,
         ));
         return userCredential.user;
-      }else{
+      } else {
         throw FirebaseAuthException(
           code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
           message: 'Missing Google ID Token',
