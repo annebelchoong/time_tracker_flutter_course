@@ -122,7 +122,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   void _updateState() {
-    print('email : $_email, password: $_password');
     setState(() {});
   }
 }
