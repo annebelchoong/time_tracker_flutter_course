@@ -8,9 +8,17 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 
 import 'email_sign_in_page.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  bool _isLoading = false;
+
   void _showSignInError(BuildContext context, Exception exception) {
-    if(exception is FirebaseException && exception.code == 'ERROR_ABORTED_BY_USER'){
+    if (exception is FirebaseException &&
+        exception.code == 'ERROR_ABORTED_BY_USER') {
       return;
     }
     showExceptionAlertDialog(
@@ -22,21 +30,27 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
+      setState(() => _isLoading = true);
       final auth = Provider.of<AuthBase>(context, listen: false);
       //FirebaseAuth.instances is the one and only instances in the class
       //use user because it return a user
       await auth.signInAnonymously();
     } on Exception catch (e) {
       _showSignInError(context, e);
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
+      setState(() => _isLoading = true);
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithGoogle();
     } on Exception catch (e) {
       _showSignInError(context, e);
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
