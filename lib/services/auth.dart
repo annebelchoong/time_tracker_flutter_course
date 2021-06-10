@@ -77,7 +77,7 @@ class Auth implements AuthBase {
     } else {
       throw FirebaseAuthException(
         code: 'ERROR_ABORTED_BY_USER',
-        message: 'Sign in abortes by user',
+        message: 'Sign in aborted by user',
       );
     }
   }
