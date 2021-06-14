@@ -1,7 +1,7 @@
 import 'dart:async';
 
 class SignInBloc{
-  //Added a stream controller to access the stream
+  //Added a  new stream controller to manage the loading state and to access the stream
   final StreamController<bool> _isLoadingController = StreamController<bool>();
   //input stream for the stream builder
   //_isLoadingController is a private class which means the isLoadingStream can only access the stream but not the controller
