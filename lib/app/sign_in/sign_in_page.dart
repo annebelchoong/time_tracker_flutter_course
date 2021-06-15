@@ -10,9 +10,10 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'email_sign_in_page.dart';
 
 class SignInPage extends StatefulWidget {
-  //
+  //Use static because it's only useful when used together with a signinpage
   static Widget create(BuildContext context){
     return Provider<SignInBloc>(
+      //Use _ for arguments that are not needed
       create: (_) => SignInBloc(),
       child: SignInPage(),
     );
@@ -73,18 +74,27 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<SignInBloc>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Time Tracker'),
         centerTitle: true,
         elevation: 2.0,
       ),
-      body: _buildContent(context),
+      // wrap the StreamBuilder here for the _buildContext only is because
+      // when its loading the app bar does not need to rebuild
+      body: StreamBuilder<bool>(
+        stream: bloc.isLoadingStream,
+        initialData: false,
+        builder: (context, snapshot) {
+          return _buildContent(context, snapshot.data);
+        }
+      ),
       backgroundColor: Colors.grey[900],
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context, bool isLoading) {
     return Padding(
       padding: EdgeInsets.all(30.0),
       child: Column(
