@@ -23,17 +23,16 @@ class SignInBloc{
   void _setIsLoading (bool isLoading) => _isLoadingController.add(isLoading);
 
   // Passing Function() with the type Function<User> as an argument to signInMethod
-  Future<User> _signIn(Future<User> Function() signInMethod) async{
-    try{
+  Future<User> _signIn(Future<User> Function() signInMethod) async {
+    try {
       _setIsLoading(true);
       return await signInMethod();
-    }catch(e){
-      rethrow;
-      //  Set the setIsLoading back to false despite it succeed or not
-    }finally{
+    } catch (e) {
+      //will only setIsLoading to false when sign in fails
       _setIsLoading(false);
+      rethrow;
     }
-}
+  }
   Future<User> signInAnonymously() async => await _signIn(auth.signInAnonymously);
   Future<User> signInWithGoogle() async => await _signIn(auth.signInWithGoogle);
 }
