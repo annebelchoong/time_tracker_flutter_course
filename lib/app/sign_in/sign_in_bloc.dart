@@ -1,6 +1,14 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:time_tracker_flutter_course/services/auth.dart';
+
 class SignInBloc{
+  SignInBloc({@required this.auth});
+  final AuthBase auth;
+  //Add the 3 different sign in method (I only have 2 for now)
+
   //Added a  new stream controller to manage the loading state and to access the stream
   final StreamController<bool> _isLoadingController = StreamController<bool>();
   //input stream for the stream builder
@@ -12,5 +20,20 @@ class SignInBloc{
     _isLoadingController.close();
   }
   //Add values to the stream
-  void setIsLoading (bool isLoading) => _isLoadingController.add(isLoading);
+  void _setIsLoading (bool isLoading) => _isLoadingController.add(isLoading);
+
+  // Passing Function() with the type Function<User> as an argument to signInMethod
+  Future<User> _signIn(Future<User> Function() signInMethod) async{
+    try{
+      _setIsLoading(true);
+      return await signInMethod();
+    }catch(e){
+      rethrow;
+      //  Set the setIsLoading back to false despite it succeed or not
+    }finally{
+      _setIsLoading(false);
+    }
+}
+  Future<User> signInAnonymously() async => await _signIn(auth.signInAnonymously);
+  Future<User> signInWithGoogle() async => await _signIn(auth.signInWithGoogle);
 }
