@@ -9,17 +9,20 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 
 import 'email_sign_in_page.dart';
 
+
 class SignInPage extends StatelessWidget {
   // Add this so that no need to have repetitive provider in each sign in method
   const SignInPage({Key key, this.bloc}) : super(key: key);
   final SignInBloc bloc;
 
-  //Adding the provider to the top of the widget tree
-  //Use static because it's only useful when used together with a signinpage
-  static Widget create(BuildContext context){
+  // Adding the provider to the top of the widget tree
+  // Use static because it's only useful when used together with a signinpage
+  static Widget create(BuildContext context) {
+    // To pass the authbase object to the constructor
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return Provider<SignInBloc>(
-      //Use _ for arguments that are not needed
-      create: (_) => SignInBloc(),
+      // Use _ for arguments that are not needed
+      create: (_) => SignInBloc(auth: auth),
       // Close the stream when no longer under widget tree
       dispose: (_, bloc) => bloc.dispose(),
       // Consumer is used to rebuild the SignInPage and to access the signInBloc
@@ -43,28 +46,19 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      bloc.setIsLoading(true);
-      final auth = Provider.of<AuthBase>(context, listen: false);
       //FirebaseAuth.instances is the one and only instances in the class
       //use user because it return a user
-      await auth.signInAnonymously();
+      await bloc.signInAnonymously();
     } on Exception catch (e) {
       _showSignInError(context, e);
-    } finally {
-      bloc.setIsLoading(false);
-
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      bloc.setIsLoading(true);
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signInWithGoogle();
+      await bloc.signInWithGoogle();
     } on Exception catch (e) {
       _showSignInError(context, e);
-    } finally {
-      bloc.setIsLoading(false);
     }
   }
 
@@ -88,11 +82,11 @@ class SignInPage extends StatelessWidget {
       // wrap the StreamBuilder here for the _buildContext only is because
       // when its loading the app bar does not need to rebuild
       body: StreamBuilder<bool>(
-        stream: bloc.isLoadingStream,
-        initialData: false,
-        builder: (context, snapshot) {
-          return _buildContent(context, snapshot.data);
-        }
+          stream: bloc.isLoadingStream,
+          initialData: false,
+          builder: (context, snapshot) {
+            return _buildContent(context, snapshot.data);
+          }
       ),
       backgroundColor: Colors.grey[900],
     );
