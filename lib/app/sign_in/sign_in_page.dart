@@ -20,6 +20,8 @@ class SignInPage extends StatelessWidget {
     return Provider<SignInBloc>(
       //Use _ for arguments that are not needed
       create: (_) => SignInBloc(),
+      // Close the stream when no longer under widget tree
+      dispose: (_, bloc) => bloc.dispose(),
       // Consumer is used to rebuild the SignInPage and to access the signInBloc
       child: Consumer<SignInBloc>(
         builder: (_, bloc, __) => SignInPage(bloc: bloc),
