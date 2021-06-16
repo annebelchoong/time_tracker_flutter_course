@@ -10,12 +10,20 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'email_sign_in_page.dart';
 
 class SignInPage extends StatelessWidget {
+  // Add this so that no need to have repetitive provider in each sign in method
+  const SignInPage({Key key, this.bloc}) : super(key: key);
+  final SignInBloc bloc;
+
+  //Adding the provider to the top of the widget tree
   //Use static because it's only useful when used together with a signinpage
   static Widget create(BuildContext context){
     return Provider<SignInBloc>(
       //Use _ for arguments that are not needed
       create: (_) => SignInBloc(),
-      child: SignInPage(),
+      // Consumer is used to rebuild the SignInPage and to access the signInBloc
+      child: Consumer<SignInBloc>(
+        builder: (_, bloc, __) => SignInPage(bloc: bloc),
+      ),
     );
   }
 
@@ -32,7 +40,6 @@ class SignInPage extends StatelessWidget {
   }
 
   Future<void> _signInAnonymously(BuildContext context) async {
-    final bloc = Provider.of<SignInBloc>(context, listen: false);
     try {
       bloc.setIsLoading(true);
       final auth = Provider.of<AuthBase>(context, listen: false);
@@ -48,7 +55,6 @@ class SignInPage extends StatelessWidget {
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
-    final bloc = Provider.of<SignInBloc>(context, listen: false);
     try {
       bloc.setIsLoading(true);
       final auth = Provider.of<AuthBase>(context, listen: false);
@@ -71,7 +77,6 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of<SignInBloc>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Time Tracker'),
