@@ -16,6 +16,7 @@ class LandingPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           final User user = snapshot.data;
           if (user == null) {
+            //Will call the property create in SignInPage instead of the SignInPage to run the provider first
             return SignInPage.create(context);
           }
           return HomePage();
