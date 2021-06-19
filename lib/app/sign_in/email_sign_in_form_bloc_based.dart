@@ -68,17 +68,8 @@ class _EmailSignInFormState extends State<EmailSignInFormBlocBased> {
     FocusScope.of(context).requestFocus(newFocus);
   }
 
-  void _toggleFormType(EmailSignInModel model) {
-    widget.bloc.updateWith(
-      //the purpose is to reset the form when toggle the form type, so set all to empty string
-      email: '',
-      password: '',
-      submitted: false,
-      isLoading: false,
-      formType: model.formType == EmailSignInFormType.signIn
-          ? EmailSignInFormType.register
-          : EmailSignInFormType.signIn,
-    );
+  void _toggleFormType() {
+    widget.bloc.toggleFormType();
     _emailController.clear();
     _passwordController.clear();
   }
@@ -105,7 +96,7 @@ class _EmailSignInFormState extends State<EmailSignInFormBlocBased> {
         text: primaryText,
       ),
       TextButton(
-        onPressed: !model.isLoading ? () => _toggleFormType(model) : null,
+        onPressed: !model.isLoading ?  _toggleFormType : null,
         child: Text(secondaryText),
       ),
     ];
@@ -124,7 +115,7 @@ class _EmailSignInFormState extends State<EmailSignInFormBlocBased> {
       ),
       obscureText: true,
       textInputAction: TextInputAction.done,
-      onChanged: (password) => widget.bloc.updateWith(password: password),
+      onChanged: widget.bloc.updatePassword,
       onEditingComplete: _submit,
     );
   }
@@ -144,7 +135,8 @@ class _EmailSignInFormState extends State<EmailSignInFormBlocBased> {
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      onChanged: (email) => widget.bloc.updateWith(email: email),
+      //both the onChanged and the updateEmail have the same signature(i think is same return type)
+      onChanged:widget.bloc.updateEmail,
       onEditingComplete: () => _emailEditingComplete(model),
     );
   }

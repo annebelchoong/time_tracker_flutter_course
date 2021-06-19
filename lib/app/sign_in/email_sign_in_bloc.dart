@@ -7,11 +7,12 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 class EmailSignInBloc {
   // Inject the authbase to the bloc to use
   EmailSignInBloc({@required this.auth});
+
   final AuthBase auth;
+
   //Create stream controller to control the stream
   final StreamController<EmailSignInModel> _modelController =
       StreamController<EmailSignInModel>();
-
 
   // Output of the controller
   Stream<EmailSignInModel> get modelStream => _modelController.stream;
@@ -44,14 +45,35 @@ class EmailSignInBloc {
     }
   }
 
+  //Moving the toggleformtype to bloc
+  void toggleFormType() {
+    final formType = _model.formType == EmailSignInFormType.signIn
+        ? EmailSignInFormType.register
+        : EmailSignInFormType.signIn;
+    updateWith(
+      //the purpose is to reset the form when toggle the form type, so set all to empty string
+      email: '',
+      password: '',
+      formType: formType,
+      submitted: false,
+      isLoading: false,
+    );
+  }
+
+  //Update email
+  void updateEmail(String email) => updateWith(email: email);
+
+  //Update password
+  void updatePassword(String password) => updateWith(password: password);
+
   void updateWith({
     String email,
     String password,
     EmailSignInFormType formType,
     bool isLoading,
     bool submitted,
-  }){
-  //  update model
+  }) {
+    //  update model
     _model = _model.copyWith(
       email: email,
       password: password,
@@ -59,7 +81,7 @@ class EmailSignInBloc {
       isLoading: isLoading,
       submitted: submitted,
     );
-  //  add updated model to _modelController
+    //  add updated model to _modelController
     _modelController.add(_model);
   }
 }
